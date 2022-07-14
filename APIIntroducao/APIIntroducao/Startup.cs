@@ -32,7 +32,7 @@ namespace APIIntroducao
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -40,6 +40,17 @@ namespace APIIntroducao
             }
 
             app.UseMvc();
+
+            if (!context.Categorias.Any())
+            {
+                context.Categorias.AddRange(new List<Categoria>() {
+                    new Categoria(){Nome = "Alimentos"},
+                    new Categoria(){Nome = "Bebidas"},
+                    new Categoria(){Nome = "Limpeza"}
+                });
+
+                context.SaveChanges();
+            }
         }
     }
 }
