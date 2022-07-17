@@ -19,10 +19,23 @@ namespace APIIntroducao.Controllers
             this.context = context;
         }
 
+
         [HttpGet]
         public IEnumerable<Categoria> Get()
         {
             return context.Categorias.ToList();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var cat = context.Categorias.FirstOrDefault(x => x.Id == id);
+
+            if(cat == null)
+            {
+                return NotFound();
+            }
+            return Ok(cat);
         }
     }
 }
