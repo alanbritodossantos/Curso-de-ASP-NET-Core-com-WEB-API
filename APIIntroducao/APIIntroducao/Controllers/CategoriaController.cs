@@ -26,16 +26,29 @@ namespace APIIntroducao.Controllers
             return context.Categorias.ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name ="categoriaCriada")]
         public IActionResult GetById(int id)
         {
             var cat = context.Categorias.FirstOrDefault(x => x.Id == id);
 
-            if(cat == null)
+            if (cat == null)
             {
                 return NotFound();
             }
             return Ok(cat);
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Categoria cat)
+        {
+            if (ModelState.IsValid) {
+                context.Categorias.Add(cat);
+                context.SaveChanges();
+                return new CreatedAtRouteResult("categoriaCriada", new { id = cat.Id }, cat);
+            }
+
+            return BadRequest(ModelState);
+        }
+        
     }
 }
