@@ -67,5 +67,22 @@ namespace APIIntroducao.Controllers
             
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var cat = context.Categorias.FirstOrDefault(x => x.Id == id);
+
+            if (cat.Id != id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            context.Categorias.Remove(cat);
+            context.SaveChanges();
+            return Ok();
+
+
+        }
+
     }
 }
