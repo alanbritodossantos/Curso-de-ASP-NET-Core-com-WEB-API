@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using APIIntroducao.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIIntroducao.Controllers
 {
@@ -54,14 +55,16 @@ namespace APIIntroducao.Controllers
         [HttpPut("{id}")]
         public IActionResult Put([FromBody] Categoria cat, int id)
         {
-            if (ModelState.IsValid)
+            if (cat.Id != id)
             {
-                context.Categorias.Add(cat);
-                context.SaveChanges();
-                return new CreatedAtRouteResult("categoriaCriada", new { id = cat.Id }, cat);
+                return BadRequest(ModelState);
             }
 
-            return BadRequest(ModelState);
+            context.Entry(cat).State = EntityState.Modified;
+            context.SaveChanges();
+            return Ok();
+
+            
         }
 
     }
