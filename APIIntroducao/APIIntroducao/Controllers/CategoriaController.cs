@@ -49,6 +49,20 @@ namespace APIIntroducao.Controllers
 
             return BadRequest(ModelState);
         }
-        
+
+
+        [HttpPut("{id}")]
+        public IActionResult Put([FromBody] Categoria cat, int id)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Categorias.Add(cat);
+                context.SaveChanges();
+                return new CreatedAtRouteResult("categoriaCriada", new { id = cat.Id }, cat);
+            }
+
+            return BadRequest(ModelState);
+        }
+
     }
 }
